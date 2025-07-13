@@ -1,92 +1,74 @@
-local G2L = {}
+-- Create loading GUI
+local loadingGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+loadingGui.Name = "LoadingUI"
 
-if not isfolder("Koronis") then
-	makefolder("Koronis")
-end
-KeyModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/nf-36/Koronis/refs/heads/main/Data/KeySystemModule.lua"))()
+local frame = Instance.new("Frame", loadingGui)
+frame.Size = UDim2.new(0, 350, 0, 200)
+frame.Position = UDim2.new(0.5, -175, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+frame.BorderSizePixel = 0
+frame.ClipsDescendants = true
 
-local keyFile
-if not isfile("Koronis/key.txt") then
-	writefile("Koronis/key.txt","")
-	keyFile = readfile("Koronis/key.txt")
-else
-	keyFile = readfile("Koronis/key.txt")
-	local response = KeyModule.Functions.CheckKey(keyFile)
-	if response.STATUS.code == "KEY_VALID" then
-		-- Loading screen GUI
-		local loadingGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-		loadingGui.Name = "LoadingUI"
+local title = Instance.new("TextLabel", frame)
+title.Text = "SKIPPING TO 100%"
+title.Size = UDim2.new(1, 0, 0.2, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.TextColor3 = Color3.fromRGB(0, 255, 255)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBlack
+title.TextScaled = true
 
-		local frame = Instance.new("Frame", loadingGui)
-		frame.Size = UDim2.new(0, 300, 0, 150)
-		frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-		frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-		frame.BorderSizePixel = 0
+local subtitle = Instance.new("TextLabel", frame)
+subtitle.Text = "SCRIPT LOADING"
+subtitle.Size = UDim2.new(1, 0, 0.2, 0)
+subtitle.Position = UDim2.new(0, 0, 0.2, 0)
+subtitle.TextColor3 = Color3.fromRGB(255, 0, 200)
+subtitle.BackgroundTransparency = 1
+subtitle.Font = Enum.Font.GothamBlack
+subtitle.TextScaled = true
 
-		local title = Instance.new("TextLabel", frame)
-		title.Text = "SKIPPING TO 100%"
-		title.Size = UDim2.new(1, 0, 0.2, 0)
-		title.Position = UDim2.new(0, 0, 0, 0)
-		title.TextColor3 = Color3.fromRGB(0, 255, 255)
-		title.BackgroundTransparency = 1
-		title.Font = Enum.Font.GothamBold
-		title.TextScaled = true
+local percentLabel = Instance.new("TextLabel", frame)
+percentLabel.Text = "0%"
+percentLabel.Size = UDim2.new(1, 0, 0.1, 0)
+percentLabel.Position = UDim2.new(0, 0, 0.4, 0)
+percentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+percentLabel.BackgroundTransparency = 1
+percentLabel.Font = Enum.Font.Gotham
+percentLabel.TextScaled = true
 
-		local subtitle = Instance.new("TextLabel", frame)
-		subtitle.Text = "SCRIPT LOADING"
-		subtitle.Size = UDim2.new(1, 0, 0.2, 0)
-		subtitle.Position = UDim2.new(0, 0, 0.2, 0)
-		subtitle.TextColor3 = Color3.fromRGB(255, 0, 255)
-		subtitle.BackgroundTransparency = 1
-		subtitle.Font = Enum.Font.GothamBold
-		subtitle.TextScaled = true
+local progressBarBack = Instance.new("Frame", frame)
+progressBarBack.Size = UDim2.new(0.8, 0, 0.05, 0)
+progressBarBack.Position = UDim2.new(0.1, 0, 0.55, 0)
+progressBarBack.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+progressBarBack.BorderSizePixel = 0
 
-		local progressBarBack = Instance.new("Frame", frame)
-		progressBarBack.Size = UDim2.new(0.9, 0, 0.2, 0)
-		progressBarBack.Position = UDim2.new(0.05, 0, 0.5, 0)
-		progressBarBack.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-		progressBarBack.BorderSizePixel = 0
+local progressBar = Instance.new("Frame", progressBarBack)
+progressBar.Size = UDim2.new(0, 0, 1, 0)
+progressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+progressBar.BorderSizePixel = 0
 
-		local progressBar = Instance.new("Frame", progressBarBack)
-		progressBar.Size = UDim2.new(1, 0, 1, 0)
-		progressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-		progressBar.BorderSizePixel = 0
+local credit = Instance.new("TextLabel", frame)
+credit.Text = "Made by MilesMTG and KryptKid"
+credit.Size = UDim2.new(1, 0, 0.15, 0)
+credit.Position = UDim2.new(0, 0, 0.75, 0)
+credit.TextColor3 = Color3.fromRGB(255, 255, 255)
+credit.BackgroundTransparency = 1
+credit.Font = Enum.Font.Gotham
+credit.TextScaled = true
 
-		local credit = Instance.new("TextLabel", frame)
-		credit.Text = "Made by MilesMTG and KryptKid"
-		credit.Size = UDim2.new(1, 0, 0.2, 0)
-		credit.Position = UDim2.new(0, 0, 0.75, 0)
-		credit.TextColor3 = Color3.fromRGB(255, 255, 255)
-		credit.BackgroundTransparency = 1
-		credit.Font = Enum.Font.Gotham
-		credit.TextScaled = true
-
-		wait(3)
-		loadingGui:Destroy()
-
-		game:GetService("StarterGui"):SetCore("SendNotification", {
-			Title = "Found User",
-			Text = "Key Found, Loading Koronis...",
-			Duration = 5
-		})
-		script_key = keyFile
-		response.API.load_script()
-		script:Destroy()
-		return
-	end
+-- Animate loading bar to 100%
+for i = 1, 100 do
+	progressBar.Size = UDim2.new(i/100, 0, 1, 0)
+	percentLabel.Text = tostring(i) .. "%"
+	wait(0.03)
 end
 
-local kSpoof = game:GetService("HttpService"):GenerateGUID(false)
-local KORONIS_SAVEKEY = false
+-- KEEP the GUI at 100% instead of destroying it immediately
+wait(2) -- short pause at 100%
+-- Do NOT destroy the GUI immediately
 
--- COPY_KEY FUNCTION UPDATE (FOR REFERENCE):
--- setclipboard("https://lootdest.org/s?ho60VJgK")
-
--- Load key system GUI (injected below this line automatically)
-local function C_25()
-	local G2L_UI, requireUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/nf-36/Koronis/refs/heads/main/KeyUI/Gui.lua"))()
-	task.spawn(C_25)
-	return G2L_UI, requireUI;
-end;
-
-return C_25();
+game:GetService("StarterGui"):SetCore("SendNotification", {
+	Title = "Found User",
+	Text = "Key Found, Loading Koronis...",
+	Duration = 5
+})
