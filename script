@@ -1,87 +1,94 @@
--- CLEAN LOADING SCREEN TEST (Standalone)
+pcall(function()
 
-local loadingGui = Instance.new("ScreenGui")
-loadingGui.Name = "LoadingUI"
-loadingGui.ResetOnSpawn = false
-loadingGui.Parent = game:GetService("CoreGui")
+    local Players = game:GetService("Players")
+    local StarterGui = game:GetService("StarterGui")
+    local player = Players.LocalPlayer
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 350, 0, 200)
-frame.Position = UDim2.new(0.5, -175, 0.5, -100)
-frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-frame.BorderSizePixel = 0
-frame.Parent = loadingGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "KoronisLoadingUI"
+    screenGui.ResetOnSpawn = false
 
-local title = Instance.new("TextLabel")
-title.Text = "SKIPPING TO 100%"
-title.Size = UDim2.new(1, 0, 0.2, 0)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.TextColor3 = Color3.fromRGB(0, 255, 255)
-title.BackgroundTransparency = 1
-title.Font = Enum.Font.GothamBlack
-title.TextScaled = true
-title.Parent = frame
+    -- Use CoreGui if possible, fallback to PlayerGui
+    local success, err = pcall(function()
+        screenGui.Parent = game:GetService("CoreGui")
+    end)
+    if not success then
+        screenGui.Parent = player:WaitForChild("PlayerGui")
+    end
 
-local subtitle = Instance.new("TextLabel")
-subtitle.Text = "SCRIPT LOADING"
-subtitle.Size = UDim2.new(1, 0, 0.2, 0)
-subtitle.Position = UDim2.new(0, 0, 0.2, 0)
-subtitle.TextColor3 = Color3.fromRGB(255, 0, 200)
-subtitle.BackgroundTransparency = 1
-subtitle.Font = Enum.Font.GothamBlack
-subtitle.TextScaled = true
-subtitle.Parent = frame
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 350, 0, 200)
+    frame.Position = UDim2.new(0.5, -175, 0.5, -100)
+    frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    frame.BorderSizePixel = 0
+    frame.Parent = screenGui
 
-local percentLabel = Instance.new("TextLabel")
-percentLabel.Text = "0%"
-percentLabel.Size = UDim2.new(1, 0, 0.1, 0)
-percentLabel.Position = UDim2.new(0, 0, 0.4, 0)
-percentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-percentLabel.BackgroundTransparency = 1
-percentLabel.Font = Enum.Font.Gotham
-percentLabel.TextScaled = true
-percentLabel.Parent = frame
+    local title = Instance.new("TextLabel")
+    title.Text = "SKIPPING TO 100%"
+    title.Size = UDim2.new(1, 0, 0.2, 0)
+    title.Position = UDim2.new(0, 0, 0, 0)
+    title.TextColor3 = Color3.fromRGB(0, 255, 255)
+    title.BackgroundTransparency = 1
+    title.Font = Enum.Font.GothamBlack
+    title.TextScaled = true
+    title.Parent = frame
 
-local progressBarBack = Instance.new("Frame")
-progressBarBack.Size = UDim2.new(0.8, 0, 0.05, 0)
-progressBarBack.Position = UDim2.new(0.1, 0, 0.55, 0)
-progressBarBack.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-progressBarBack.BorderSizePixel = 0
-progressBarBack.Parent = frame
+    local subtitle = Instance.new("TextLabel")
+    subtitle.Text = "SCRIPT LOADING"
+    subtitle.Size = UDim2.new(1, 0, 0.2, 0)
+    subtitle.Position = UDim2.new(0, 0, 0.2, 0)
+    subtitle.TextColor3 = Color3.fromRGB(255, 0, 200)
+    subtitle.BackgroundTransparency = 1
+    subtitle.Font = Enum.Font.GothamBlack
+    subtitle.TextScaled = true
+    subtitle.Parent = frame
 
-local progressBar = Instance.new("Frame")
-progressBar.Size = UDim2.new(0, 0, 1, 0)
-progressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-progressBar.BorderSizePixel = 0
-progressBar.Parent = progressBarBack
+    local percentLabel = Instance.new("TextLabel")
+    percentLabel.Text = "0%"
+    percentLabel.Size = UDim2.new(1, 0, 0.1, 0)
+    percentLabel.Position = UDim2.new(0, 0, 0.4, 0)
+    percentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    percentLabel.BackgroundTransparency = 1
+    percentLabel.Font = Enum.Font.Gotham
+    percentLabel.TextScaled = true
+    percentLabel.Parent = frame
 
-local credit = Instance.new("TextLabel")
-credit.Text = "Made by MilesMTG and KryptKid"
-credit.Size = UDim2.new(1, 0, 0.15, 0)
-credit.Position = UDim2.new(0, 0, 0.75, 0)
-credit.TextColor3 = Color3.fromRGB(255, 255, 255)
-credit.BackgroundTransparency = 1
-credit.Font = Enum.Font.Gotham
-credit.TextScaled = true
-credit.Parent = frame
+    local progressBarBack = Instance.new("Frame")
+    progressBarBack.Size = UDim2.new(0.8, 0, 0.05, 0)
+    progressBarBack.Position = UDim2.new(0.1, 0, 0.55, 0)
+    progressBarBack.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    progressBarBack.BorderSizePixel = 0
+    progressBarBack.Parent = frame
 
--- Animate loading bar to 100%
-for i = 1, 100 do
-	progressBar.Size = UDim2.new(i/100, 0, 1, 0)
-	percentLabel.Text = tostring(i) .. "%"
-	wait(0.03)
-end
+    local progressBar = Instance.new("Frame")
+    progressBar.Size = UDim2.new(0, 0, 1, 0)
+    progressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+    progressBar.BorderSizePixel = 0
+    progressBar.Parent = progressBarBack
 
--- Hold at 100%
-percentLabel.Text = "100%"
-wait(2)
+    local credit = Instance.new("TextLabel")
+    credit.Text = "Made by MilesMTG and KryptKid"
+    credit.Size = UDim2.new(1, 0, 0.15, 0)
+    credit.Position = UDim2.new(0, 0, 0.75, 0)
+    credit.TextColor3 = Color3.fromRGB(255, 255, 255)
+    credit.BackgroundTransparency = 1
+    credit.Font = Enum.Font.Gotham
+    credit.TextScaled = true
+    credit.Parent = frame
 
--- Optional: Remove after holding
--- loadingGui:Destroy()
+    for i = 1, 100 do
+        progressBar.Size = UDim2.new(i / 100, 0, 1, 0)
+        percentLabel.Text = tostring(i) .. "%"
+        wait(0.02)
+    end
 
--- Optional: Notification
-game:GetService("StarterGui"):SetCore("SendNotification", {
-	Title = "Loaded",
-	Text = "Koronis script ready!",
-	Duration = 5
-})
+    percentLabel.Text = "100%"
+    wait(2)
+
+    StarterGui:SetCore("SendNotification", {
+        Title = "Loaded",
+        Text = "Koronis script ready!",
+        Duration = 5
+    })
+
+end)
