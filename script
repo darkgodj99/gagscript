@@ -1,10 +1,19 @@
+local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
+
+-- Remove old GUI if it exists (in case script runs twice)
+if CoreGui:FindFirstChild("KoronisFullScreenLoading") then
+    CoreGui.KoronisFullScreenLoading:Destroy()
+end
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "KoronisFullScreenLoading"
 screenGui.IgnoreGuiInset = true
 screenGui.ResetOnSpawn = false
+
+-- Parent to CoreGui safely
 pcall(function()
-	screenGui.Parent = CoreGui
+    screenGui.Parent = CoreGui
 end)
 
 local blackBackground = Instance.new("Frame")
@@ -57,7 +66,6 @@ progressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 progressBar.BorderSizePixel = 0
 progressBar.Parent = progressBack
 
--- Optional credit at the bottom
 local credit = Instance.new("TextLabel")
 credit.Text = "Made by MilesMTG and KryptKid"
 credit.Size = UDim2.new(1, 0, 0, 30)
@@ -68,12 +76,23 @@ credit.Font = Enum.Font.Gotham
 credit.TextScaled = true
 credit.Parent = blackBackground
 
--- Animate loading bar to 100%
-for i = 1, 100 do
-	progressBar.Size = UDim2.new(i / 100, 0, 1, 0)
-	percent.Text = i .. "%"
-	wait(0.02)
+-- Tween progressBar from 0 to 100%
+local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear) -- 2 seconds duration
+local goal = {Size = UDim2.new(1, 0, 1, 0)}
+
+local tween = TweenService:Create(progressBar, tweenInfo, goal)
+tween:Play()
+
+local startTime = tick()
+local duration = 2
+
+-- Update percent label as the tween plays
+while tick() - startTime < duration do
+    local elapsed = tick() - startTime
+    local percentNum = math.floor((elapsed / duration) * 100)
+    percent.Text = percentNum .. "%"
+    wait(0.05)
 end
 
--- Stay at 100%
 percent.Text = "100%"
+-- Stays at 100% indefinitely
